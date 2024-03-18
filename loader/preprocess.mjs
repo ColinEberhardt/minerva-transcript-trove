@@ -17,8 +17,7 @@ export async function summarise(transcription) {
     messages: [
       {
         role: "system",
-        content:
-          `You are a skilled meeting transcriber. I would like you to read the
+        content: `You are a skilled meeting transcriber. I would like you to read the
           following transcription of a meeting and summarize it into a concise
           bullet point format, ensuring that all significant discussion points
           are captured. In each case, include key dates, names, places and whether

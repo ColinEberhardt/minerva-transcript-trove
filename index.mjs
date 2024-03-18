@@ -17,8 +17,10 @@ import {
 import { parser } from "./loader/teams-parser.mjs";
 import { query } from "./query.mjs";
 
+
+
 program
-  .name("Transcript Trove")
+  .name("minerva")
   .description("A GPT-powered agent for analysing meeting transcripts");
 
 program
@@ -51,7 +53,11 @@ program
           const parsed = await parser(filePath);
           save(parsed);
           console.log(`Meeting summary copied to clipboard`);
-          clipboard.writeSync(parsed.summary);
+          clipboard.writeSync(`
+AI generated meeting summary:
+${parsed.summary}
+[generated via https://github.com/ColinEberhardt/minerva-transcript-trove]
+`);
         }
       }
     });

@@ -1,4 +1,4 @@
-# Transcript Trove
+# Minerva - the Transcript Trove
 
 A GPT-powered command line tool for analysing meeting transcripts, generating meeting summaries, action lists and querying. The goal of this project is to create a valuable knowledge-base from meeting minutes, helping you become more organised and efficient.
 
@@ -20,7 +20,7 @@ Minerva is executed via a command line interface:
 
 ~~~
 % node index.mjs
-Usage: Transcript Trove [options] [command]
+Usage: minerva [options] [command]
 
 An agent for analysing meeting transcripts using GenAI
 
