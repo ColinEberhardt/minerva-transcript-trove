@@ -56,7 +56,7 @@ program
           clipboard.writeSync(`
 AI generated meeting summary:
 ${parsed.summary}
-[generated via https://github.com/ColinEberhardt/minerva-transcript-trove]
+[ generated via https://github.com/ColinEberhardt/minerva-transcript-trove ]
 `);
         }
       }
