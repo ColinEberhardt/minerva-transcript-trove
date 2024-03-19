@@ -21,6 +21,12 @@ export async function init() {
   });
 }
 
+export function getAllMeetings() {
+  const meetings = [...transcripts];
+  meetings.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return meetings;
+}
+
 export function getMeetingsWithAttendee(attendee) {
   const meetings = transcripts.filter((t) => t.attendees.includes(attendee));
   meetings.sort((a, b) => new Date(b.date) - new Date(a.date));

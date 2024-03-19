@@ -10,14 +10,13 @@ import { globby } from "globby";
 
 import {
   save,
-  getAllAttendees,
   init,
+  getAllAttendees,
   getMeetingsWithAttendee,
+  getAllMeetings,
 } from "./transcripts/index.mjs";
 import { parser } from "./loader/teams-parser.mjs";
 import { query } from "./query.mjs";
-
-
 
 program
   .name("minerva")
@@ -65,38 +64,52 @@ ${parsed.summary}
 
 const matches = (a, b) => a.toLowerCase().includes(b ? b.toLowerCase() : "");
 
+async function selectMeeting(meetings) {
+  return await autocomplete({
+    message: "Select a meeting",
+    source: (input) =>
+      meetings
+        .filter((m) =>
+          m.title.toLowerCase().includes(input ? input.toLowerCase() : "")
+        )
+        .map((m) => ({
+          value: m,
+          name: `${m.date} - ${m.title}`,
+        })),
+  });
+}
+
 program
   .command("interactive-query")
   .description("Perform an interactive query on meeting transcripts.")
   .action(async () => {
     await init();
 
-    // select an attendee
-    const allAttendees = getAllAttendees();
-    const attendee = await autocomplete({
-      message: "Select an attendee",
-      source: (input) =>
-        allAttendees
-          .filter((a) => matches(a, input))
-          .map((attendee) => ({
-            value: attendee,
-          })),
+    let meeting;
+    const method = await inquirer.prompt({
+      type: "list",
+      name: "method",
+      message: "Find meeting by ...",
+      choices: ["Attendees", "Date"],
     });
+    
+    if (method.answer === "Attendees") {
+      // select an attendee
+      const allAttendees = getAllAttendees();
+      const attendee = await autocomplete({
+        message: "Select an attendee",
+        source: (input) =>
+          allAttendees
+            .filter((a) => matches(a, input))
+            .map((attendee) => ({
+              value: attendee,
+            })),
+      });
 
-    // select a meeting
-    const meetings = getMeetingsWithAttendee(attendee);
-    const meeting = await autocomplete({
-      message: "Select a meeting",
-      source: (input) =>
-        meetings
-          .filter((m) =>
-            m.title.toLowerCase().includes(input ? input.toLowerCase() : "")
-          )
-          .map((m) => ({
-            value: m,
-            name: `${m.date} - ${m.title}`,
-          })),
-    });
+      meeting = await selectMeeting(getMeetingsWithAttendee(attendee));
+    } else {
+      meeting = await selectMeeting(getAllMeetings());
+    }
 
     while (true) {
       const question = await inquirer
